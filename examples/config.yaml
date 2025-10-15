@@ -1,0 +1,30 @@
+default:
+  scan_profile: quick
+  output_format: json
+  rate_limit: 0.1
+  timeout: 30
+
+profiles:
+  quick:
+    tools: ["nmap", "nikto"]
+    nmap_scan: "quick"
+    
+  deep:
+    tools: ["nmap", "nikto", "fuzzer", "sqlmap"]
+    nmap_scan: "deep"
+    sqlmap_level: 2
+    
+  full:
+    tools: ["nmap", "nikto", "fuzzer", "sqlmap", "zap"]
+    nmap_scan: "deep"
+    sqlmap_level: 3
+
+tools:
+  nmap:
+    command: "nmap -T4"
+    
+  nikto:
+    command: "nikto -h {target}"
+    
+  sqlmap:
+    command: "sqlmap -u {target} --batch"
