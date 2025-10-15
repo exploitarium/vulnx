@@ -123,71 +123,7 @@ def plugins():
     console.print("  • [cyan]fuzzer[/cyan] - Endpoint discovery")
 
 def main():
-    cli(prog_name='vulnx')
-
-if __name__ == '__main__':
-    main()        console.print("\n[bold green]Scan Completed![/bold green]")
-        console.print(f"[bold blue]Tools used: {', '.join(result['tools_used'])}[/bold blue]")
-        output_handler.display_results()
-        
-        if output and output_file:
-            output_handler.save_results(output, output_file)
-        elif output:
-            import re
-            safe_target = re.sub(r'[^a-zA-Z0-9]', '_', target)
-            output_handler.save_results(output, f"vulnx_scan_{safe_target}")
-            
-    except ValidationError as e:
-        console.print(f"[red]Error: {str(e)}[/red]")
-    except Exception as e:
-        console.print(f"[red]Unexpected error: {str(e)}[/red]")
-        if verbose:
-            import traceback
-            console.print(traceback.format_exc())
-
-@cli.command()
-@click.option('--target', '-t', required=True, help='Target to fuzz')
-@click.option('--wordlist', '-w', help='Path to wordlist file')
-@click.option('--threads', default=10, help='Number of threads')
-def fuzz(target, wordlist, threads):
-    console = Console()
-    
-    try:
-        from .tools import Fuzzer
-        fuzzer = Fuzzer()
-        
-        if not wordlist:
-            wordlist = ["admin", "login", "api", "config", "backup", "test", 
-                       "debug", "phpinfo", "wp-admin", "administrator"]
-        else:
-            with open(wordlist, 'r') as f:
-                wordlist = [line.strip() for line in f.readlines()]
-        
-        console.print(f"[yellow]Fuzzing {target} with {len(wordlist)} words...[/yellow]")
-        
-        results = fuzzer.fuzz_endpoints(target, wordlist, threads)
-        
-        if results:
-            console.print(f"[green]Discovered {len(results)} endpoints:[/green]")
-            for result in results:
-                console.print(f"  {result['url']} - {result['status_code']}")
-        else:
-            console.print("[yellow]No endpoints discovered[/yellow]")
-            
-    except Exception as e:
-        console.print(f"[red]Error: {str(e)}[/red]")
-
-@cli.command()
-def plugins():
-    console = Console()
-    console.print("[bold blue]Available Plugins:[/bold blue]")
-    console.print("  • [cyan]nmap[/cyan] - Network port scanning")
-    console.print("  • [cyan]nikto[/cyan] - Web server scanning") 
-    console.print("  • [cyan]sqlmap[/cyan] - SQL injection testing")
-    console.print("  • [cyan]zap[/cyan] - OWASP ZAP integration")
-    console.print("  • [cyan]fuzzer[/cyan] - Endpoint discovery")
-
-def main():
+    """Main entry point"""
     cli(prog_name='vulnx')
 
 if __name__ == '__main__':
